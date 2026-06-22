@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "316793447034",
+    "project_id": "karirku-final",
+    "storage_bucket": "karirku-final.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316793447034:android:34e9187770acc2977751c3",
+        "android_client_info": {
+          "package_name": "com.example.karirku_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmaK82x_m9a7l7CRquXHp3jx84KZgvRck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
