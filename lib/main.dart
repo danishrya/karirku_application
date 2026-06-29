@@ -5,7 +5,6 @@ import 'package:karirku_application/firebase_options.dart';
 import 'package:karirku_application/providers/auth_provider.dart';
 import 'package:karirku_application/providers/job_provider.dart';
 import 'package:karirku_application/screens/splash/splash_screen.dart';
-import 'package:karirku_application/services/seed_data.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -14,7 +13,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Seed data removed so it doesn't recreate dummy jobs automatically
 
   runApp(
     MultiProvider(

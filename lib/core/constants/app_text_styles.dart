@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:karirku_application/core/constants/app_colors.dart';
 
 /// Centralized text styles for KarirKu app.
-/// Uses system font with consistent sizing and weights.
+/// Uses Google Fonts Inter for a modern look.
 class AppTextStyles {
   AppTextStyles._();
 
   // ─── Headings ──────────────────────────────────────────
-  static const TextStyle heading1 = TextStyle(
+  static TextStyle heading1 = GoogleFonts.inter(
     fontSize: 32,
     fontWeight: FontWeight.w800,
     color: AppColors.navy,
@@ -15,7 +16,7 @@ class AppTextStyles {
     letterSpacing: -0.5,
   );
 
-  static const TextStyle heading2 = TextStyle(
+  static TextStyle heading2 = GoogleFonts.inter(
     fontSize: 24,
     fontWeight: FontWeight.w700,
     color: AppColors.navy,
@@ -23,14 +24,14 @@ class AppTextStyles {
     letterSpacing: -0.3,
   );
 
-  static const TextStyle heading3 = TextStyle(
+  static TextStyle heading3 = GoogleFonts.inter(
     fontSize: 20,
     fontWeight: FontWeight.w700,
     color: AppColors.textPrimary,
     height: 1.3,
   );
 
-  static const TextStyle heading4 = TextStyle(
+  static TextStyle heading4 = GoogleFonts.inter(
     fontSize: 18,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
@@ -38,21 +39,21 @@ class AppTextStyles {
   );
 
   // ─── Body ──────────────────────────────────────────────
-  static const TextStyle bodyLarge = TextStyle(
+  static TextStyle bodyLarge = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
     height: 1.5,
   );
 
-  static const TextStyle bodyMedium = TextStyle(
+  static TextStyle bodyMedium = GoogleFonts.inter(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
     height: 1.5,
   );
 
-  static const TextStyle bodySmall = TextStyle(
+  static TextStyle bodySmall = GoogleFonts.inter(
     fontSize: 12,
     fontWeight: FontWeight.w400,
     color: AppColors.textSecondary,
@@ -60,21 +61,21 @@ class AppTextStyles {
   );
 
   // ─── Labels ────────────────────────────────────────────
-  static const TextStyle labelLarge = TextStyle(
+  static TextStyle labelLarge = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     height: 1.4,
   );
 
-  static const TextStyle labelMedium = TextStyle(
+  static TextStyle labelMedium = GoogleFonts.inter(
     fontSize: 14,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     height: 1.4,
   );
 
-  static const TextStyle labelSmall = TextStyle(
+  static TextStyle labelSmall = GoogleFonts.inter(
     fontSize: 12,
     fontWeight: FontWeight.w600,
     color: AppColors.textSecondary,
@@ -82,7 +83,7 @@ class AppTextStyles {
   );
 
   // ─── Caption ───────────────────────────────────────────
-  static const TextStyle caption = TextStyle(
+  static TextStyle caption = GoogleFonts.inter(
     fontSize: 11,
     fontWeight: FontWeight.w500,
     color: AppColors.textHint,
@@ -90,14 +91,14 @@ class AppTextStyles {
   );
 
   // ─── Button ────────────────────────────────────────────
-  static const TextStyle buttonLarge = TextStyle(
+  static TextStyle buttonLarge = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: AppColors.textOnPrimary,
     letterSpacing: 0.3,
   );
 
-  static const TextStyle buttonMedium = TextStyle(
+  static TextStyle buttonMedium = GoogleFonts.inter(
     fontSize: 14,
     fontWeight: FontWeight.w600,
     color: AppColors.textOnPrimary,
@@ -105,7 +106,7 @@ class AppTextStyles {
   );
 
   // ─── Chip / Tag ────────────────────────────────────────
-  static const TextStyle chip = TextStyle(
+  static TextStyle chip = GoogleFonts.inter(
     fontSize: 11,
     fontWeight: FontWeight.w600,
     height: 1.2,

@@ -21,11 +21,11 @@ class JobCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.border, width: 0.5),
           boxShadow: [
             BoxShadow(
-              color: AppColors.textPrimary.withOpacity(0.05),
+              color: AppColors.textPrimary.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -50,7 +50,8 @@ class JobCard extends StatelessWidget {
                           job.companyLogo,
                           fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.business, color: AppColors.primary),
+                              const Icon(Icons.business,
+                                  color: AppColors.primary),
                         )
                       : Image.asset(job.companyLogo, fit: BoxFit.contain),
                 ),
@@ -118,13 +119,23 @@ class JobCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  job.salary,
-                  style: AppTextStyles.labelMedium.copyWith(
-                    color: AppColors.success,
+                Expanded(
+                  child: Text(
+                    job.salary,
+                    style: AppTextStyles.labelMedium.copyWith(
+                      color: AppColors.success,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Text(job.location, style: AppTextStyles.caption),
+                const SizedBox(width: 8),
+                Text(
+                  job.location,
+                  style: AppTextStyles.caption,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
           ],
@@ -138,7 +149,7 @@ class JobCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
         label,

@@ -43,11 +43,11 @@ class CustomButton extends StatelessWidget {
               ? AppColors.primaryGradient
               : null,
           color: onPressed == null || isLoading ? AppColors.border : null,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(30),
           boxShadow: onPressed != null && !isLoading
               ? [
                   BoxShadow(
-                    color: AppColors.primary.withOpacity(0.3),
+                    color: AppColors.primary.withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -60,7 +60,7 @@ class CustomButton extends StatelessWidget {
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(30),
             ),
           ),
           child: _buildChild(AppColors.textOnPrimary),

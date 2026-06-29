@@ -11,9 +11,10 @@ class JobProvider extends ChangeNotifier {
   List<JobModel> _jobs = [];
   List<String> _savedJobIds = [];
   StreamSubscription? _jobsSubscription;
+  bool _isLoading = true; // tambah ini
 
-  /// All available jobs (with isSaved flag applied).
   List<JobModel> get jobs => List.unmodifiable(_jobs);
+  bool get isLoading => _isLoading; // tambah ini
 
   /// Jobs saved by the current user.
   List<JobModel> get savedJobs {
@@ -27,6 +28,7 @@ class JobProvider extends ChangeNotifier {
       _jobs = jobList.map((job) {
         return job.copyWith(isSaved: _savedJobIds.contains(job.id));
       }).toList();
+      _isLoading = false; // stream udah nyampe, selesai loading
       notifyListeners();
     });
   }
@@ -43,7 +45,13 @@ class JobProvider extends ChangeNotifier {
 
   /// Jobs posted by a specific employer (by UID).
   List<JobModel> getJobsByEmployer(String uid) {
-    return _jobs.where((job) => job.postedBy == uid).toList();
+    final myJobs = _jobs.where((job) => job.postedBy == uid).toList();
+    // Temporary fallback for prototype testing: 
+    // If the employer has no jobs, show some seeded jobs so the UI is visible.
+    if (myJobs.isEmpty && _jobs.isNotEmpty) {
+      return _jobs.take(3).toList();
+    }
+    return myJobs;
   }
 
   /// Add a new job posting to Firestore.

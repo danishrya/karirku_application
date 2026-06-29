@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:provider/provider.dart';
 import 'package:karirku_application/core/constants/app_assets.dart';
+import 'package:karirku_application/core/constants/app_colors.dart';
 import 'package:karirku_application/core/enums/user_role.dart';
 import 'package:karirku_application/providers/auth_provider.dart';
 import 'package:karirku_application/screens/employer/employer_main_screen.dart';
@@ -90,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.primary, // Updated to solid primary color
       body: Center(
         child: AnimatedBuilder(
           animation: _animationController,
@@ -99,9 +100,16 @@ class _SplashScreenState extends State<SplashScreen>
               opacity: _fadeAnimation.value,
               child: Transform.scale(
                 scale: _scaleAnimation.value,
-                child: Image.asset(
-                  AppAssets.logo,
-                  width: 250,
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset(
+                    AppAssets.logo,
+                    width: 150,
+                  ),
                 ),
               ),
             );

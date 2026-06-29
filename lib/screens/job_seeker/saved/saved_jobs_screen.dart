@@ -12,49 +12,85 @@ class SavedJobsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Lowongan Disimpan'),
-        backgroundColor: Colors.transparent,
-      ),
-      body: Consumer<JobProvider>(
-        builder: (context, provider, child) {
-          final savedJobs = provider.savedJobs;
-
-          if (savedJobs.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: AppColors.primary,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            // Header Section
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.bookmark_border_rounded, size: 64, color: AppColors.textHint),
-                  const SizedBox(height: 16),
                   Text(
-                    'Belum ada lowongan tersimpan.',
-                    style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textSecondary),
+                    'Lowongan Disimpan',
+                    style: AppTextStyles.heading2.copyWith(color: Colors.white),
+                  ),
+                  const CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.white24,
+                    child: Icon(Icons.bookmark, color: Colors.white, size: 20),
                   ),
                 ],
               ),
-            );
-          }
+            ),
+            const SizedBox(height: 8),
 
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-            itemCount: savedJobs.length,
-            itemBuilder: (context, index) {
-              return JobCard(
-                job: savedJobs[index],
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => JobDetailScreen(job: savedJobs[index]),
-                    ),
-                  );
-                },
-              );
-            },
-          );
-        },
+            // White Content Sheet
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
+                  ),
+                ),
+                child: Consumer<JobProvider>(
+                  builder: (context, provider, child) {
+                    final savedJobs = provider.savedJobs;
+
+                    if (savedJobs.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.bookmark_border_rounded, size: 64, color: AppColors.textHint),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Belum ada lowongan tersimpan.',
+                              style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textSecondary),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                      itemCount: savedJobs.length,
+                      itemBuilder: (context, index) {
+                        return JobCard(
+                          job: savedJobs[index],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => JobDetailScreen(job: savedJobs[index]),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

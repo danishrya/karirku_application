@@ -27,33 +27,32 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isPasswordVisible = false;
 
   Future<void> _handleLogin() async {
-    if (_formKey.currentState!.validate()) {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final success = await authProvider.login(
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-      );
+  if (_formKey.currentState!.validate()) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final success = await authProvider.login(
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
+    );
+
+    if (!mounted) return;
+
+    if (success) {
+      final jobProvider = Provider.of<JobProvider>(context, listen: false);
+      final uid = authProvider.currentUser?.uid;
+      if (uid != null) await jobProvider.loadSavedJobs(uid);
 
       if (!mounted) return;
-
-      if (success) {
-        // Load saved jobs for the logged-in user
-        final jobProvider = Provider.of<JobProvider>(context, listen: false);
-        final uid = authProvider.currentUser!.uid;
-        await jobProvider.loadSavedJobs(uid);
-
-        if (!mounted) return;
-        _navigateToMainScreen();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(authProvider.errorMessage ?? 'Login gagal'),
-            backgroundColor: AppColors.error,
-          ),
-        );
-      }
+      _navigateToMainScreen();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(authProvider.errorMessage ?? 'Login gagal'),
+          backgroundColor: AppColors.error,
+        ),
+      );
     }
   }
+}
 
   void _navigateToMainScreen() {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -91,131 +90,161 @@ class _LoginScreenState extends State<LoginScreen> {
         : 'Masuk untuk menemukan pekerjaan impianmu.';
 
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.navy),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      backgroundColor: primaryColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyles.heading1,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  subtitle,
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    color: AppColors.textSecondary,
+        bottom: false,
+        child: Column(
+          children: [
+            // Header Section
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                        color: Colors.white),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Masuk',
+                    style: AppTextStyles.heading2.copyWith(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Form Section in White Bottom Sheet
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
                   ),
                 ),
-                const SizedBox(height: 48),
-                CustomTextField(
-                  label: 'Email',
-                  hintText: 'Masukkan alamat email',
-                  prefixIcon: Icons.email_outlined,
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Email tidak boleh kosong';
-                    }
-                    if (!value.contains('@')) {
-                      return 'Email tidak valid';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
-                CustomTextField(
-                  label: 'Password',
-                  hintText: 'Masukkan kata sandi',
-                  prefixIcon: Icons.lock_outline_rounded,
-                  obscureText: !_isPasswordVisible,
-                  controller: _passwordController,
-                  suffixIcon: _isPasswordVisible
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  onSuffixTap: () {
-                    setState(() {
-                      _isPasswordVisible = !_isPasswordVisible;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Password tidak boleh kosong';
-                    }
-                    if (value.length < 6) {
-                      return 'Password minimal 6 karakter';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Lupa Password?',
-                      style: AppTextStyles.labelMedium.copyWith(
-                        color: primaryColor,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                Consumer<AuthProvider>(
-                  builder: (context, authProvider, child) {
-                    return CustomButton(
-                      text: authProvider.isLoading ? 'Memproses...' : 'Login',
-                      onPressed: authProvider.isLoading ? null : _handleLogin,
-                    );
-                  },
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Belum punya akun?',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegisterScreen(
-                              role: widget.role,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: AppTextStyles.heading1,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          subtitle,
+                          style: AppTextStyles.bodyLarge.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: 48),
+                        CustomTextField(
+                          label: 'Email',
+                          hintText: 'Masukkan alamat email',
+                          prefixIcon: Icons.email_outlined,
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Email tidak boleh kosong';
+                            }
+                            if (!value.contains('@')) {
+                              return 'Email tidak valid';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        CustomTextField(
+                          label: 'Password',
+                          hintText: 'Masukkan kata sandi',
+                          prefixIcon: Icons.lock_outline_rounded,
+                          obscureText: !_isPasswordVisible,
+                          controller: _passwordController,
+                          suffixIcon: _isPasswordVisible
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          onSuffixTap: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Password tidak boleh kosong';
+                            }
+                            if (value.length < 6) {
+                              return 'Password minimal 6 karakter';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'Lupa Password?',
+                              style: AppTextStyles.labelMedium.copyWith(
+                                color: primaryColor,
+                              ),
                             ),
                           ),
-                        );
-                      },
-                      child: Text(
-                        'Daftar',
-                        style: AppTextStyles.labelMedium.copyWith(
-                          color: primaryColor,
                         ),
-                      ),
+                        const SizedBox(height: 32),
+                        Consumer<AuthProvider>(
+                          builder: (context, authProvider, child) {
+                            return CustomButton(
+                              text: authProvider.isLoading ? 'Memproses...' : 'Login',
+                              onPressed: authProvider.isLoading ? null : _handleLogin,
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Belum punya akun?',
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RegisterScreen(
+                                      role: widget.role,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                'Daftar',
+                                style: AppTextStyles.labelMedium.copyWith(
+                                  color: primaryColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 40),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

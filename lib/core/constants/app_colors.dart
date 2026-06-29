@@ -1,36 +1,36 @@
 import 'package:flutter/material.dart';
 
 /// Centralized color palette for KarirKu app.
-/// All colors used across the app should reference this class.
+/// Updated to match vibrant Figma design.
 class AppColors {
   AppColors._();
 
   // ─── Primary ───────────────────────────────────────────
-  static const Color primary = Color(0xFF2563EB);
-  static const Color primaryLight = Color(0xFF60A5FA);
-  static const Color primaryDark = Color(0xFF1D4ED8);
+  static const Color primary = Color(0xFF0062FF); // Vibrant Blue
+  static const Color primaryLight = Color(0xFF5C9DFF);
+  static const Color primaryDark = Color(0xFF004BCC);
 
   // ─── Accent / Employer ─────────────────────────────────
-  static const Color accent = Color(0xFF06B6D4);
-  static const Color accentLight = Color(0xFF67E8F9);
-  static const Color accentDark = Color(0xFF0891B2);
+  static const Color accent = Color(0xFF00C853); // Vibrant Green
+  static const Color accentLight = Color(0xFF5EFB89);
+  static const Color accentDark = Color(0xFF009624);
 
   // ─── Dark Navy ─────────────────────────────────────────
-  static const Color navy = Color(0xFF1A1D3E);
-  static const Color navyLight = Color(0xFF27214D);
+  static const Color navy = Color(0xFF1E293B);
+  static const Color navyLight = Color(0xFF334155);
 
   // ─── Semantic ──────────────────────────────────────────
-  static const Color success = Color(0xFF10B981);
-  static const Color successLight = Color(0xFFD1FAE5);
-  static const Color warning = Color(0xFFF59E0B);
-  static const Color warningLight = Color(0xFFFEF3C7);
-  static const Color error = Color(0xFFEF4444);
-  static const Color errorLight = Color(0xFFFEE2E2);
-  static const Color info = Color(0xFF3B82F6);
-  static const Color infoLight = Color(0xFFDBEAFE);
+  static const Color success = Color(0xFF00C853);
+  static const Color successLight = Color(0xFFB9F6CA);
+  static const Color warning = Color(0xFFFFB300);
+  static const Color warningLight = Color(0xFFFFECB3);
+  static const Color error = Color(0xFFFF3B30);
+  static const Color errorLight = Color(0xFFFFCDD2);
+  static const Color info = Color(0xFF0062FF);
+  static const Color infoLight = Color(0xFFE3F2FD);
 
   // ─── Neutral / Surface ─────────────────────────────────
-  static const Color background = Color(0xFFF8FAFC);
+  static const Color background = Color(0xFFF4F7F9);
   static const Color surface = Color(0xFFFFFFFF);
   static const Color surfaceVariant = Color(0xFFF1F5F9);
   static const Color border = Color(0xFFE2E8F0);
@@ -44,36 +44,36 @@ class AppColors {
 
   // ─── Gradients ─────────────────────────────────────────
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [Color(0xFF2563EB), Color(0xFF06B6D4)],
+    colors: [Color(0xFF0062FF), Color(0xFF3384FF)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static const LinearGradient employerGradient = LinearGradient(
-    colors: [Color(0xFF0891B2), Color(0xFF06B6D4)],
+    colors: [Color(0xFF009624), Color(0xFF00C853)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static const LinearGradient darkGradient = LinearGradient(
-    colors: [Color(0xFF1A1D3E), Color(0xFF2563EB)],
+    colors: [Color(0xFF1E293B), Color(0xFF0062FF)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static const LinearGradient cardGradient = LinearGradient(
-    colors: [Color(0xFF2563EB), Color(0xFF60A5FA)],
+    colors: [Color(0xFF0062FF), Color(0xFF5C9DFF)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   // ─── Chip / Tag Colors ─────────────────────────────────
-  static const Color chipBlueBackground = Color(0xFFDBEAFE);
-  static const Color chipBlueText = Color(0xFF2563EB);
-  static const Color chipGreenBackground = Color(0xFFD1FAE5);
-  static const Color chipGreenText = Color(0xFF059669);
-  static const Color chipAmberBackground = Color(0xFFFEF3C7);
-  static const Color chipAmberText = Color(0xFFD97706);
-  static const Color chipPurpleBackground = Color(0xFFEDE9FE);
-  static const Color chipPurpleText = Color(0xFF7C3AED);
+  static const Color chipBlueBackground = Color(0xFFE3F2FD);
+  static const Color chipBlueText = Color(0xFF0062FF);
+  static const Color chipGreenBackground = Color(0xFFE8F5E9);
+  static const Color chipGreenText = Color(0xFF00C853);
+  static const Color chipAmberBackground = Color(0xFFFFF8E1);
+  static const Color chipAmberText = Color(0xFFFFB300);
+  static const Color chipPurpleBackground = Color(0xFFF3E5F5);
+  static const Color chipPurpleText = Color(0xFF9C27B0);
 }
