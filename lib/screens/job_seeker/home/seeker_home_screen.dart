@@ -6,7 +6,6 @@ import 'package:karirku_application/providers/job_provider.dart';
 import 'package:karirku_application/screens/job_seeker/detail/job_detail_screen.dart';
 import 'package:karirku_application/screens/job_seeker/mentoring/mentoring_screen.dart';
 import 'package:karirku_application/screens/job_seeker/simulation/work_simulation_screen.dart';
-import 'package:karirku_application/widgets/custom_text_field.dart';
 import 'package:karirku_application/widgets/job_card.dart';
 import 'package:karirku_application/widgets/section_header.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +37,8 @@ class SeekerHomeScreen extends StatelessWidget {
                 children: [
                   // Blue Header Content
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: 24.0),
                     child: Column(
                       children: [
                         Row(
@@ -74,12 +74,16 @@ class SeekerHomeScreen extends StatelessWidget {
                         TextField(
                           decoration: InputDecoration(
                             hintText: 'Cari posisi, perusahaan...',
-                            hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textHint),
-                            prefixIcon: const Icon(Icons.search_rounded, color: AppColors.textHint),
-                            suffixIcon: const Icon(Icons.tune_rounded, color: AppColors.primary),
+                            hintStyle: AppTextStyles.bodyMedium
+                                .copyWith(color: AppColors.textHint),
+                            prefixIcon: const Icon(Icons.search_rounded,
+                                color: AppColors.textHint),
+                            suffixIcon: const Icon(Icons.tune_rounded,
+                                color: AppColors.primary),
                             filled: true,
                             fillColor: Colors.white,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 16),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
                               borderSide: BorderSide.none,
@@ -89,7 +93,7 @@ class SeekerHomeScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  
+
                   // White Content Sheet
                   Container(
                     width: double.infinity,
@@ -112,30 +116,38 @@ class SeekerHomeScreen extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             children: [
                               _CategoryCard(
-                                icon: Icons.laptop_chromebook_rounded, 
-                                title: 'Simulasi', 
+                                icon: Icons.laptop_chromebook_rounded,
+                                title: 'Simulasi',
                                 color: AppColors.primary,
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const WorkSimulationScreen()));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const WorkSimulationScreen()));
                                 },
                               ),
                               _CategoryCard(
-                                icon: Icons.people_alt_rounded, 
-                                title: 'Mentoring', 
+                                icon: Icons.people_alt_rounded,
+                                title: 'Mentoring',
                                 color: AppColors.accent,
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MentoringScreen()));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const MentoringScreen()));
                                 },
                               ),
                               _CategoryCard(
-                                icon: Icons.design_services, 
-                                title: 'Design', 
+                                icon: Icons.design_services,
+                                title: 'Design',
                                 color: AppColors.warning,
                                 onTap: () {},
                               ),
                               _CategoryCard(
-                                icon: Icons.code, 
-                                title: 'IT & Eng', 
+                                icon: Icons.code,
+                                title: 'IT & Eng',
                                 color: AppColors.success,
                                 onTap: () {},
                               ),
@@ -156,7 +168,8 @@ class SeekerHomeScreen extends StatelessWidget {
 
                             if (jobs.isEmpty) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 32),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 32),
                                 child: Center(
                                   child: Text(
                                     'Memuat lowongan...',
@@ -179,7 +192,8 @@ class SeekerHomeScreen extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => JobDetailScreen(job: jobs[index]),
+                                        builder: (context) =>
+                                            JobDetailScreen(job: jobs[index]),
                                       ),
                                     );
                                   },

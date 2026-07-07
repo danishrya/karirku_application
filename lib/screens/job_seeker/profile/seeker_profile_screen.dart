@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:karirku_application/core/constants/app_colors.dart';
 import 'package:karirku_application/core/constants/app_text_styles.dart';
 import 'package:karirku_application/providers/auth_provider.dart';
-import 'package:karirku_application/screens/auth/role_selection_screen.dart';
+import 'package:karirku_application/screens/auth/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class SeekerProfileScreen extends StatelessWidget {
@@ -21,7 +21,8 @@ class SeekerProfileScreen extends StatelessWidget {
           children: [
             // Header Section
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
               child: Column(
                 children: [
                   Row(
@@ -29,10 +30,12 @@ class SeekerProfileScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Profil',
-                        style: AppTextStyles.heading2.copyWith(color: Colors.white),
+                        style: AppTextStyles.heading2
+                            .copyWith(color: Colors.white),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.settings_outlined, color: Colors.white),
+                        icon: const Icon(Icons.settings_outlined,
+                            color: Colors.white),
                         onPressed: () {},
                       ),
                     ],
@@ -43,7 +46,8 @@ class SeekerProfileScreen extends StatelessWidget {
                       const CircleAvatar(
                         radius: 40,
                         backgroundColor: Colors.white24,
-                        child: Icon(Icons.person, size: 40, color: Colors.white),
+                        child:
+                            Icon(Icons.person, size: 40, color: Colors.white),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
@@ -52,12 +56,14 @@ class SeekerProfileScreen extends StatelessWidget {
                           children: [
                             Text(
                               user?.name ?? 'User',
-                              style: AppTextStyles.heading2.copyWith(color: Colors.white),
+                              style: AppTextStyles.heading2
+                                  .copyWith(color: Colors.white),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               user?.email ?? '-',
-                              style: AppTextStyles.bodyMedium.copyWith(color: Colors.white70),
+                              style: AppTextStyles.bodyMedium
+                                  .copyWith(color: Colors.white70),
                             ),
                           ],
                         ),
@@ -114,7 +120,8 @@ class SeekerProfileScreen extends StatelessWidget {
                           if (!context.mounted) return;
                           Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()),
                             (route) => false,
                           );
                         },
@@ -152,8 +159,10 @@ class SeekerProfileScreen extends StatelessWidget {
           ),
           child: Icon(icon, color: color),
         ),
-        title: Text(title, style: AppTextStyles.bodyLarge.copyWith(color: color, fontWeight: FontWeight.w600)),
-        trailing: Icon(Icons.chevron_right, color: AppColors.textHint),
+        title: Text(title,
+            style: AppTextStyles.bodyLarge
+                .copyWith(color: color, fontWeight: FontWeight.w600)),
+        trailing: const Icon(Icons.chevron_right, color: AppColors.textHint),
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),

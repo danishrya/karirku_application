@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:karirku_application/core/constants/app_assets.dart';
 import 'package:karirku_application/core/constants/app_colors.dart';
 import 'package:karirku_application/core/constants/app_text_styles.dart';
-import 'package:karirku_application/screens/auth/role_selection_screen.dart';
+import 'package:karirku_application/screens/auth/login_screen.dart';
 import 'package:karirku_application/widgets/custom_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -44,10 +44,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.dispose();
   }
 
-  void _navigateToRoleSelection() {
+  void _navigateToLogin() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
   }
 
@@ -62,11 +62,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Align(
               alignment: Alignment.topRight,
               child: TextButton(
-                onPressed: _navigateToRoleSelection,
+                onPressed: _navigateToLogin,
                 child: const Text('Skip'),
               ),
             ),
-            
+
             // PageView
             Expanded(
               child: PageView.builder(
@@ -109,7 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 },
               ),
             ),
-            
+
             // Bottom Controls
             Padding(
               padding: const EdgeInsets.all(24),
@@ -130,7 +130,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     text: isLastPage ? 'Mulai Sekarang' : 'Selanjutnya',
                     onPressed: () {
                       if (isLastPage) {
-                        _navigateToRoleSelection();
+                        _navigateToLogin();
                       } else {
                         _pageController.nextPage(
                           duration: const Duration(milliseconds: 300),

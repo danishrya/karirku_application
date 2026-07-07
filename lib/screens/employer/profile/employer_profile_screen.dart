@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:karirku_application/core/constants/app_colors.dart';
 import 'package:karirku_application/core/constants/app_text_styles.dart';
 import 'package:karirku_application/providers/auth_provider.dart';
-import 'package:karirku_application/screens/auth/role_selection_screen.dart';
+import 'package:karirku_application/screens/auth/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class EmployerProfileScreen extends StatelessWidget {
@@ -26,14 +26,17 @@ class EmployerProfileScreen extends StatelessWidget {
             const CircleAvatar(
               radius: 50,
               backgroundColor: AppColors.surfaceVariant,
-              child: Icon(Icons.business, size: 50, color: AppColors.accentDark),
+              child:
+                  Icon(Icons.business, size: 50, color: AppColors.accentDark),
             ),
             const SizedBox(height: 16),
-            Text(user?.companyName ?? user?.name ?? 'Perusahaan', style: AppTextStyles.heading2),
+            Text(user?.companyName ?? user?.name ?? 'Perusahaan',
+                style: AppTextStyles.heading2),
             const SizedBox(height: 4),
-            Text(user?.email ?? '-', style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textSecondary)),
+            Text(user?.email ?? '-',
+                style: AppTextStyles.bodyLarge
+                    .copyWith(color: AppColors.textSecondary)),
             const SizedBox(height: 32),
-            
             _buildProfileMenuItem(
               icon: Icons.edit_outlined,
               title: 'Edit Profil Perusahaan',
@@ -59,7 +62,7 @@ class EmployerProfileScreen extends StatelessWidget {
                 if (!context.mounted) return;
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                   (route) => false,
                 );
               },

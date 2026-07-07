@@ -1,6 +1,11 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:karirku_application/core/enums/user_role.dart';
+import 'package:karirku_application/models/career_preference.dart';
 import 'package:karirku_application/models/job_model.dart';
 import 'package:karirku_application/models/user_model.dart';
 
@@ -8,6 +13,9 @@ import 'package:karirku_application/models/user_model.dart';
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  /// How long a generated OTP code stays valid.
+  static const Duration otpValidity = Duration(minutes: 5);
 
   // ─── Auth ──────────────────────────────────────────────────────
 
@@ -57,6 +65,101 @@ class FirebaseService {
     await _auth.signOut();
   }
 
+  // ─── Email OTP Verification ──────────────────────────────────────
+  //
+  // The 4-digit code is generated here and stored in the
+  // `otp_verifications/{uid}` document. The code is delivered by writing
+  // a document to the `mail` collection, which is the exact format the
+  // official Firebase "Trigger Email" extension expects. Once that
+  // extension is installed (Firebase Console → Extensions → "Trigger
+  // Email") and pointed at the `mail` collection with your SMTP/SendGrid
+  // credentials, every document written here is automatically emailed to
+  // the user — no separate backend server is required.
+  //
+  // Until the extension is installed, the code is only visible in the
+  // debug console (kDebugMode) so the flow can still be tested end-to-end.
+
+  String _generateOtpCode() {
+    final rand = Random.secure();
+    return List.generate(4, (_) => rand.nextInt(10)).join();
+  }
+
+  /// Generates a new 4-digit code, stores it, and queues the delivery
+  /// email. Returns the generated code (debug/testing convenience only).
+  Future<String> generateAndSendOtp({
+    required String uid,
+    required String email,
+    required String name,
+  }) async {
+    final code = _generateOtpCode();
+    final now = DateTime.now();
+
+    await _firestore.collection('otp_verifications').doc(uid).set({
+      'email': email,
+      'code': code,
+      'attempts': 0,
+      'createdAt': Timestamp.fromDate(now),
+      'expiresAt': Timestamp.fromDate(now.add(otpValidity)),
+    });
+
+    // Queued email — sent automatically once the Trigger Email extension
+    // is watching the `mail` collection.
+    await _firestore.collection('mail').add({
+      'to': [email],
+      'message': {
+        'subject': 'Kode Verifikasi KarirKu Anda',
+        'html': '''
+          <div style="font-family:sans-serif;padding:24px">
+            <h2>Hi, $name 👋</h2>
+            <p>Kode verifikasi email Anda adalah:</p>
+            <h1 style="letter-spacing:8px">$code</h1>
+            <p>Kode ini berlaku selama 5 menit. Jangan bagikan kode ini kepada siapa pun.</p>
+          </div>
+        ''',
+      },
+    });
+
+    if (kDebugMode) {
+      debugPrint('🔐 [DEV ONLY] OTP for $email: $code');
+    }
+
+    return code;
+  }
+
+  /// Verifies a submitted OTP code against the stored one.
+  /// Returns true and marks the user verified if correct & not expired.
+  Future<OtpVerifyResult> verifyOtp({
+    required String uid,
+    required String code,
+  }) async {
+    final ref = _firestore.collection('otp_verifications').doc(uid);
+    final doc = await ref.get();
+
+    if (!doc.exists) {
+      return OtpVerifyResult.notFound;
+    }
+
+    final data = doc.data()!;
+    final expiresAt = (data['expiresAt'] as Timestamp).toDate();
+
+    if (DateTime.now().isAfter(expiresAt)) {
+      return OtpVerifyResult.expired;
+    }
+
+    if (data['code'] != code) {
+      await ref.update({'attempts': FieldValue.increment(1)});
+      return OtpVerifyResult.invalid;
+    }
+
+    // Correct code: mark the user's profile as verified and clean up.
+    await _firestore.collection('users').doc(uid).update({
+      'emailVerified': true,
+    });
+    await ref.delete();
+
+    return OtpVerifyResult.success;
+  }
+
   // ─── Users ─────────────────────────────────────────────────────
 
   /// Fetch the user profile from Firestore.
@@ -71,6 +174,33 @@ class FirebaseService {
   /// Update the user profile in Firestore.
   Future<void> updateUserProfile(UserModel user) async {
     await _firestore.collection('users').doc(user.uid).update(user.toMap());
+  }
+
+  /// Persist the job seeker's career preference profile (status, desired
+  /// roles/industries, CV & portfolio links) as a nested map on their
+  /// user document.
+  Future<void> updateCareerPreference(
+    String uid,
+    CareerPreference preference,
+  ) async {
+    await _firestore.collection('users').doc(uid).update({
+      'careerPreference': preference.toMap(),
+    });
+  }
+
+  /// Uploads a local file (CV or portfolio PDF) to Firebase Storage under
+  /// `documents/{uid}/{folder}/{fileName}` and returns its public
+  /// download URL.
+  Future<String> uploadDocument({
+    required String uid,
+    required File file,
+    required String folder,
+    required String fileName,
+  }) async {
+    final ref =
+        FirebaseStorage.instance.ref().child('documents/$uid/$folder/$fileName');
+    final task = await ref.putFile(file);
+    return await task.ref.getDownloadURL();
   }
 
   // ─── Jobs ──────────────────────────────────────────────────────
@@ -127,3 +257,6 @@ class FirebaseService {
     return [];
   }
 }
+
+/// Result of an OTP verification attempt.
+enum OtpVerifyResult { success, invalid, expired, notFound }

@@ -5,6 +5,7 @@ import 'package:karirku_application/core/constants/app_assets.dart';
 import 'package:karirku_application/core/constants/app_colors.dart';
 import 'package:karirku_application/core/enums/user_role.dart';
 import 'package:karirku_application/providers/auth_provider.dart';
+import 'package:karirku_application/screens/auth/otp_screen.dart';
 import 'package:karirku_application/screens/employer/employer_main_screen.dart';
 import 'package:karirku_application/screens/job_seeker/seeker_main_screen.dart';
 import 'package:karirku_application/screens/onboarding/onboarding_screen.dart';
@@ -47,32 +48,65 @@ class _SplashScreenState extends State<SplashScreen>
     _animationController.forward();
 
     Future.delayed(const Duration(seconds: 3), () async {
-      if (!mounted) return;
-      
+      debugPrint('🟢 splash: timer fired');
+      if (!mounted) {
+        debugPrint('🔴 splash: not mounted, aborting');
+        return;
+      }
+
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final firebaseUser = FirebaseAuth.instance.currentUser;
-      
-      if (firebaseUser != null) {
-        await authProvider.refreshUser();
-        final currentUser = authProvider.currentUser;
-        
-        if (currentUser != null && mounted) {
-          if (currentUser.role == UserRole.employer) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const EmployerMainScreen()),
-            );
-            return;
-          } else {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const SeekerMainScreen()),
-            );
-            return;
+      debugPrint('🟢 splash: firebaseUser = ${firebaseUser?.uid}');
+
+      try {
+        if (firebaseUser != null) {
+          debugPrint('🟢 splash: calling refreshUser()');
+          await authProvider.refreshUser();
+          debugPrint('🟢 splash: refreshUser() done');
+          final currentUser = authProvider.currentUser;
+          debugPrint('🟢 splash: currentUser = $currentUser');
+
+          if (currentUser != null && mounted) {
+            if (!currentUser.emailVerified) {
+              debugPrint('🟢 splash: not verified, sending OTP');
+              await authProvider.resendVerificationForCurrentSession();
+              debugPrint('🟢 splash: OTP sent, navigating to OtpScreen');
+              if (!mounted) return;
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      const OtpScreen(fromRegistration: false),
+                ),
+              );
+              return;
+            }
+
+            debugPrint('🟢 splash: verified, navigating to main screen');
+            if (currentUser.role == UserRole.employer) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const EmployerMainScreen()),
+              );
+              return;
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const SeekerMainScreen()),
+              );
+              return;
+            }
           }
         }
+      } catch (e, st) {
+        debugPrint('🔴 splash: auto-login check failed: $e');
+        debugPrint('$st');
+        // Fall through to onboarding below instead of getting stuck here.
       }
-      
+
+      debugPrint('🟢 splash: falling back to onboarding, mounted=$mounted');
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -102,7 +136,7 @@ class _SplashScreenState extends State<SplashScreen>
                 scale: _scaleAnimation.value,
                 child: Container(
                   padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),

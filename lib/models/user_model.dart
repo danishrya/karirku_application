@@ -1,4 +1,5 @@
 import 'package:karirku_application/core/enums/user_role.dart';
+import 'package:karirku_application/models/career_preference.dart';
 
 class UserModel {
   final String uid;
@@ -7,6 +8,8 @@ class UserModel {
   final String? companyName;
   final String? email;
   final List<String> savedJobs;
+  final bool emailVerified;
+  final CareerPreference careerPreference;
 
   const UserModel({
     required this.uid,
@@ -15,6 +18,8 @@ class UserModel {
     this.companyName,
     this.email,
     this.savedJobs = const [],
+    this.emailVerified = false,
+    this.careerPreference = const CareerPreference(),
   });
 
   /// Serialize to a Map for Firestore.
@@ -25,6 +30,8 @@ class UserModel {
       'companyName': companyName,
       'email': email,
       'savedJobs': savedJobs,
+      'emailVerified': emailVerified,
+      'careerPreference': careerPreference.toMap(),
     };
   }
 
@@ -37,6 +44,8 @@ class UserModel {
       companyName: map['companyName'],
       email: map['email'],
       savedJobs: List<String>.from(map['savedJobs'] ?? []),
+      emailVerified: map['emailVerified'] ?? false,
+      careerPreference: CareerPreference.fromMap(map['careerPreference']),
     );
   }
 
@@ -48,6 +57,8 @@ class UserModel {
     String? companyName,
     String? email,
     List<String>? savedJobs,
+    bool? emailVerified,
+    CareerPreference? careerPreference,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -56,6 +67,8 @@ class UserModel {
       companyName: companyName ?? this.companyName,
       email: email ?? this.email,
       savedJobs: savedJobs ?? this.savedJobs,
+      emailVerified: emailVerified ?? this.emailVerified,
+      careerPreference: careerPreference ?? this.careerPreference,
     );
   }
 }
