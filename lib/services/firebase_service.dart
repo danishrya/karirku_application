@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:karirku_application/core/enums/user_role.dart';
 import 'package:karirku_application/models/career_preference.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:karirku_application/models/job_model.dart';
 import 'package:karirku_application/models/user_model.dart';
 
@@ -197,8 +198,9 @@ class FirebaseService {
     required String folder,
     required String fileName,
   }) async {
-    final ref =
-        FirebaseStorage.instance.ref().child('documents/$uid/$folder/$fileName');
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('documents/$uid/$folder/$fileName');
     final task = await ref.putFile(file);
     return await task.ref.getDownloadURL();
   }
